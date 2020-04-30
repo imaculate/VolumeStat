@@ -1,0 +1,11 @@
+{
+    "name": "VolumeStat",
+    "version": "1.0",
+    "description": "Maintain audio volume across all tabs!",
+    "manifest_version": 2,
+    "permissions": ["storage", "activeTab"],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    }
+}
