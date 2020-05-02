@@ -3,9 +3,18 @@
     "version": "1.0",
     "description": "Maintain audio volume across all tabs!",
     "manifest_version": 2,
-    "permissions": ["storage", "activeTab"],
+    "permissions": ["storage", "activeTab", "declarativeContent"],
+    "options_page": "options.html",
     "background": {
         "scripts": ["background.js"],
-        "persistent": true
-    }
+        "persistent": false
+    },"content_scripts": 
+    [
+        {
+          "matches": ["<all_urls>"],
+          "js": ["contentScript.js"],
+          "run_at": "document_idle",
+          "all_frames": true
+        }
+    ]
 }
