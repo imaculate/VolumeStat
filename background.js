@@ -4,35 +4,33 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 });
 
+/*
+// Damn it chrome does not support programmatic tab cature, has to be initiated by user action
+// https://developer.chrome.com/extensions/activeTab
 chrome.runtime.onMessage.addListener((page, sender, sendResponse) => {
     updateTabVolume(sender.tab.id);
     sendResponse({status: "ok"});
-});
+});*/
+
+chrome.browserAction.onClicked.addListener(updateTabVolume);
 
 
-function updateTabVolume(tabId)
+function updateTabVolume()
 {
-    console.log("Message coming from tab: "+ tabId);
     // this can only be called in background script
     chrome.storage.sync.get('volume', function(data) {
     // but how do you get the stream?
-        chrome.tabs.get(tabId, (tab) => {
+        chrome.tabs.query({active: true}, (tab) => {
 
-            if (!tab.audible)
+            if(!tab)
             {
-                console.log('Nothing audible here, no need to stat this page');
+                console.log("Doesn't look like there is an active Tab here");
                 return;
             }
+
             let constraints = {
                 audio: true,
-                video: true,
-                videoConstraints: {
-                    mandatory: {
-                        chromeMediaSource: 'tab',
-                        googLeakyBucket: true,
-                        googTemporalLayeredScreencast: true
-                    }
-                }
+                video: false
             };
 
             chrome.tabCapture.capture(constraints, (stream) => {
@@ -50,7 +48,8 @@ function updateTabVolume(tabId)
                 }
 
                 console.log('setting stream volume to '+ data.volume);
-                stream.inputs[0].volume = data.volume;
+                stream.volume = data.volume;
+                // I think what you want to is to create a document audio element that plays stream, but is it? Well, I tried :)
             });
         });
     });
