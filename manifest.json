@@ -3,9 +3,18 @@
     "version": "1.0",
     "description": "Maintain audio volume across all tabs!",
     "manifest_version": 2,
-    "permissions": ["storage", "tabCapture", "activeTab", "<all_urls>"],
+    "permissions": ["storage", "tabs", "notifications", "http://*/", "https://*/"],
     "options_page": "options.html",
-    "browser_action": {},
+    "browser_action": {
+        "default_icon": {                       // optional
+          "16":  "images/icon16.png",           // optional
+          "32":  "images/icon32.png",           // optional
+          "48":  "images/icon48.png",           // optional
+          "128": "images/icon128.png"           // optional
+        },
+        "default_title": "Volume Stat - Just right!",      // optional; shown in tooltip
+        "default_popup": "popup.html"        // optional
+      },
     "background": {
         "scripts": ["background.js"],
         "persistent": true
